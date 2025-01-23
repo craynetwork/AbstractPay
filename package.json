@@ -1,0 +1,16 @@
+{
+  "name": "abstractpay",
+  "version": "1.0.0",
+  "description": "The chain-abstracted payment SDK for seamless stablecoin transactions across blockchains",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "sayli <ptsayli@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.10.9",
+    "typescript": "^5.7.3"
+  }
+}
