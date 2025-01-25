@@ -1,4 +1,3 @@
-import { stringToBytes } from "viem";
 import { apiCall } from "./api/client";
 import { IOrderParams, ISubmitOrderParams } from "./api/types";
 import { sdkConfig } from "./config";
@@ -29,9 +28,9 @@ export class AbstractPay {
     // todo: check if spender is SCA then sign seperately for all chains
     if (!this.owner) throw new Error('Owner wallet not set');
     const signedOrder = await Promise.all(orderHash.map(async (hash) => {
-      return this.owner.signMessage(stringToBytes(hash));
+      return this.owner.signMessage(hash);
     }));
-    console.log('signedOrder', signedOrder);
+
     const signedApprovalData = allowanceData && await Promise.all(allowanceData.map(async (data) => {
       return this.owner.signTypedData(data);
     }));
@@ -65,7 +64,7 @@ export class AbstractPay {
       const result = await this.initialisePayment(param);
       const { orderHash, allowance } = result;
       const { signedOrder } = await this.signPaymentData(orderHash);
-      // console.log('signedData', signedData, allowance);
+      console.log('signedData', signedOrder, allowance);
       // return this.submitOrder(orderHash, { signedOrder });
     } catch (error) {
       console.error('Error processing payment:', error);
