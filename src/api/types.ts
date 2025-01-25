@@ -68,3 +68,30 @@ export interface IOrderParams {
    */
   orderId?: string;
 }
+
+export interface ISubmitOrderParams {
+  /**
+   * Array of strings representing the signed order data.
+   * - For EOAs (Externally Owned Accounts): This array will contain only one item.
+   * - For SCAs (Smart Contract Accounts): If spending from more than one chain, this array
+   *   must include a signed order hash for each chain separately.
+   */
+  signedOrder: [string];
+
+  /**
+   * Optional array of signed approval data objects, if applicable.
+   * - This is required in cases if approvals are necessary for the transaction.
+   */
+  signedApprovalData?: [ISignedApprovalData]
+}
+
+export interface ISignedApprovalData {
+  chainId: number
+  v: number
+  r: string
+  s: string
+  verifyingContract: string
+  walletAddress: string
+  value: number
+  deadline: string
+}
