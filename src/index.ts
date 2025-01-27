@@ -1,5 +1,5 @@
 import { apiCall } from "./api/client";
-import { IOrderParams, ISubmitOrderParams } from "./api/types";
+import { IOrderParams } from "./api/types";
 import { sdkConfig } from "./config";
 import { IDomainData } from "./types/common";
 
@@ -9,14 +9,14 @@ export class AbstractPay {
     sdkConfig.setConfig(config.apiKey, config.baseUrl);
   }
 
-  setOwnerWallet(owner: { signMessage: (hash: string) => Promise<string>, signTypedData: (data: IDomainData) => Promise<string> }) {
+  setOwnerWallet(owner: { signMessage: (hash: string) => Promise<string>, signTypedData: (data: IDomainData) => Promise<string>, getOwnerAddress: () => string }) {
     this.owner = owner
   }
 
   // Create a new payment order
   public async initialisePayment(params: IOrderParams) {
     try {
-      return apiCall('/create-order', 'POST', params);
+      return apiCall('/create-order', 'POST', { params });
     } catch (error) {
       console.error('Error creating payment order:', error);
       throw error;
@@ -24,23 +24,29 @@ export class AbstractPay {
   }
 
   // sign Order
-  public async signPaymentData(orderHash: string[], allowanceData?: IDomainData[]) {
+  public async signPaymentData(orderHash: string, allowanceData?: IDomainData[]) {
     // todo: check if spender is SCA then sign seperately for all chains
+    // const orders = Array.isArray(orderHash) ? orderHash : [orderHash];
     if (!this.owner) throw new Error('Owner wallet not set');
-    const signedOrder = await Promise.all(orderHash.map(async (hash) => {
-      return this.owner.signMessage(hash);
-    }));
-
+    // const signedOrder = await Promise.all(orders.map(async (hash) => {
+    const signedOrder = await this.owner.signMessage(orderHash);
+    // }));
     const signedApprovalData = allowanceData && await Promise.all(allowanceData.map(async (data) => {
-      return this.owner.signTypedData(data);
+      const signature = await this.owner.signTypedData({
+        types: data.types,
+        domain: data.domainData,
+        message: data.values,
+        primaryType: 'Permit'
+      });
+      return { r: signature.slice(0, 66), s: '0x' + signature.slice(66, 130), v: '0x' + signature.slice(130, 132), chainId: data.domainData.chainId, verifyingContract: data.domainData.verifyingContract, walletAddress: this.owner.getOwnerAddress(), value: data.values.value, deadline: data.values.deadline };
     }));
     return { signedOrder, signedApprovalData };
   }
 
   // Submit a signed payment Order
-  public async submitOrder(orderId: string, params: ISubmitOrderParams) {
+  public async submitOrder(orderId: string, params: any) {
     try {
-      return apiCall(`/submit-order/${orderId}`, 'POST', params);
+      return apiCall(`/submit-order/${orderId}`, 'POST', { params });
     } catch (error) {
       console.error('Error submitting payment order:', error);
       throw error;
@@ -63,9 +69,8 @@ export class AbstractPay {
     try {
       const result = await this.initialisePayment(param);
       const { orderHash, allowance } = result;
-      const { signedOrder } = await this.signPaymentData(orderHash);
-      console.log('signedData', signedOrder, allowance);
-      // return this.submitOrder(orderHash, { signedOrder });
+      const { signedOrder, signedApprovalData } = await this.signPaymentData(orderHash, allowance);
+      return this.submitOrder(orderHash, { signedOrder, signedApprovalData });
     } catch (error) {
       console.error('Error processing payment:', error);
       throw error;
