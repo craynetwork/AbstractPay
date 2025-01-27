@@ -3,13 +3,15 @@ import axios from 'axios';
 import { sdkConfig } from '../config';
 
 
-export const apiClient = axios.create({
-  baseURL: sdkConfig.getBaseUrl(),
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${sdkConfig.getApiKey()}`
-  }
-});
+export const getApiClient = () => {
+  return axios.create({
+    baseURL: sdkConfig.getBaseUrl(),
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': `${sdkConfig.getApiKey()}`
+    }
+  })
+};
 
 /**
  * Generic method to make API calls
@@ -20,12 +22,13 @@ export const apiClient = axios.create({
  */
 export const apiCall = async (endpoint: string, method = 'GET', data: any) => {
   try {
+    const apiClient = getApiClient();
     const response = await apiClient.request({
       url: endpoint,
       method,
       data
     });
-    return response.data;
+    return response.data.result
   } catch (error) {
     console.error('API Call Error:', error);
     throw error;
