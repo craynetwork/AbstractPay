@@ -76,7 +76,7 @@ export interface ISubmitOrderParams {
    * - For SCAs (Smart Contract Accounts): If spending from more than one chain, this array
    *   must include a signed order hash for each chain separately.
    */
-  signedOrder: [string];
+  signedOrder: string;
 
   /**
    * Optional array of signed approval data objects, if applicable.
