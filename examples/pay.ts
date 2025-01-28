@@ -1,8 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Temporarily ignore type error, fix later
+import { AbstractPay } from 'abstractpay';
 import { Hex } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
-import { AbstractPay } from '../src/index';
 const BASEURL = process.env.BASE_URL || 'https://dev-api.cray.network/api/'
 const APIKEY = process.env.API_KEY || '0000-0000-0000-0000-0000'
 const sdk = new AbstractPay({
@@ -36,7 +36,7 @@ const payParams = {
   senderAddress,
 }
 
-sdk.pay(payParams).then((res) => { console.log(res) }).catch((err) => { console.error(err) })
+sdk.pay(payParams).then((res: any) => { console.log(res) }).catch((err: any) => { console.error(err) })
 
 // ------------------ Sign OrderHash ------------------
 // const orderHash = ['0x4062fe1da0763030c0c34fb41c848502e7adecaec8540657be57721bcfa761b5']
