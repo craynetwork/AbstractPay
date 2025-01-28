@@ -3,7 +3,7 @@
 import { Hex } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { AbstractPay } from '../src/index';
-const BASEURL = process.env.BASE_URL || 'https://watcher.cray.network/api/'
+const BASEURL = process.env.BASE_URL || 'https://dev-api.cray.network/api/'
 const APIKEY = process.env.API_KEY || '0000-0000-0000-0000-0000'
 const sdk = new AbstractPay({
   apiKey: APIKEY,
