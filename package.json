@@ -1,15 +1,25 @@
 {
   "name": "abstractpay",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "The chain-abstracted payment SDK for seamless stablecoin transactions across blockchains",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "lint": "eslint 'src/**/*.ts'",
     "format": "prettier --write 'src/**/*.{ts,js,json}'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "sdk",
+    "payments",
+    "blockchain",
+    "chain-abstraction",
+    "stablecoin"
+  ],
   "author": "sayli <ptsayli@gmail.com>",
   "license": "MIT",
   "devDependencies": {
