@@ -35,7 +35,7 @@ npm install abstractpay
 For API key access, reach out to us directly via direct message or email.
 
 ```typescript
-import { AbstractPay } from 'abstractpay-sdk';
+import { AbstractPay } from 'abstractpay';
 
 const sdk = new AbstractPay({
   apiKey: '<your-api-key>',
