@@ -1,6 +1,6 @@
 {
   "name": "abstractpay",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "The chain-abstracted payment SDK for seamless stablecoin transactions across blockchains",
   "main": "dist/index.js",
   "scripts": {
