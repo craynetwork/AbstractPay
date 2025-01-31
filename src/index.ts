@@ -25,7 +25,7 @@ export class AbstractPay {
 
   // sign Order
   public async signPaymentData(orderHash: string, allowanceData?: IDomainData[]) {
-    // todo: check if spender is SCA then sign seperately for all chains
+    // todo: check if spender is SCA then sign separately for all chains
     // const orders = Array.isArray(orderHash) ? orderHash : [orderHash];
     if (!this.owner) throw new Error('Owner wallet not set');
     // const signedOrder = await Promise.all(orders.map(async (hash) => {
