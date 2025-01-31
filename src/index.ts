@@ -56,7 +56,7 @@ export class AbstractPay {
   // Associates the sender's address with an existing order in a scan-and-pay workflow
   public async setPayerForOrder(orderId: string, payerAddress: string) {
     try {
-      return apiCall(`/scan-and-pay/${orderId}`, 'PUT', { spenderAddress: payerAddress });
+      return apiCall(`/set-payee/${orderId}`, 'PUT', { spenderAddress: payerAddress });
     }
     catch (error) {
       console.error('Error setting payer for order:', error);
