@@ -1,3 +1,4 @@
+import { Account } from "viem";
 import { apiCall } from "./api/client";
 import { IOrderParams } from "./api/types";
 import { sdkConfig } from "./config";
@@ -9,7 +10,7 @@ export class AbstractPay {
     sdkConfig.setConfig(config.apiKey, config.baseUrl);
   }
 
-  setOwnerWallet(owner: { signMessage: (hash: string) => Promise<string>, signTypedData: (data: IDomainData) => Promise<string>, getOwnerAddress: () => string }) {
+  setOwnerWallet(owner: Account) {
     this.owner = owner
   }
 
@@ -29,7 +30,7 @@ export class AbstractPay {
     // const orders = Array.isArray(orderHash) ? orderHash : [orderHash];
     if (!this.owner) throw new Error('Owner wallet not set');
     // const signedOrder = await Promise.all(orders.map(async (hash) => {
-    const signedOrder = await this.owner.signMessage(orderHash);
+    const signedOrder = await this.owner.signMessage({ message: { raw: orderHash } });
     // }));
     const signedApprovalData = allowanceData && await Promise.all(allowanceData.map(async (data) => {
       const signature = await this.owner.signTypedData({
@@ -38,7 +39,7 @@ export class AbstractPay {
         message: data.values,
         primaryType: 'Permit'
       });
-      return { r: signature.slice(0, 66), s: '0x' + signature.slice(66, 130), v: '0x' + signature.slice(130, 132), chainId: data.domainData.chainId, verifyingContract: data.domainData.verifyingContract, walletAddress: this.owner.getOwnerAddress(), value: data.values.value, deadline: data.values.deadline };
+      return { r: signature.slice(0, 66), s: '0x' + signature.slice(66, 130), v: '0x' + signature.slice(130, 132), chainId: data.domainData.chainId, verifyingContract: data.domainData.verifyingContract, walletAddress: this.owner.address, value: data.values.value, deadline: data.values.deadline };
     }));
     return { signedOrder, signedApprovalData };
   }

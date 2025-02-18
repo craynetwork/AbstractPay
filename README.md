@@ -43,14 +43,7 @@ const sdk = new AbstractPay({
 });
 
 // Set the owner's wallet for signing transactions
-sdk.setOwnerWallet({
-  signMessage: async (hash: string) => {
-    return wallet.signMessage(hash);
-  },
-  signTypedData: async (data: any) => {
-    return wallet.signTypedData(data);
-  },
-});
+sdk.setOwnerWallet(wallet);
 ```
 
 ### One click payment
