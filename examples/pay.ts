@@ -13,17 +13,7 @@ const privateKey = process.env.PRIVATE_KEY || "0x<your private key goes here>"
 
 const account = privateKeyToAccount(privateKey as Hex);
 
-sdk.setOwnerWallet({
-  signMessage: (async (hash: string) => {
-    return account.signMessage({ message: hash });
-  }),
-  signTypedData: (async (data: any) => {
-    return account.signTypedData(data)
-  }),
-  getOwnerAddress: (() => {
-    return account.address
-  })
-})
+sdk.setOwnerWallet(account)
 const senderAddress = account.address as string
 console.log('senderAddress:', senderAddress)
 // ------------------ pay ------------------
