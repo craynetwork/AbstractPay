@@ -16,5 +16,5 @@ Be careful with your private key, Use a key your are comfortable with for develo
 
 ```bash
 cd .. // make sure you are on AbstractPay directory
-npm run build && ts-node examples/pay.ts
+npm run build && ts-node examples/simple_pay.ts
 ```
