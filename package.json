@@ -1,13 +1,14 @@
 {
   "name": "abstractpay",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "The chain-abstracted payment SDK for seamless stablecoin transactions across blockchains",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "lint": "eslint 'src/**/*.ts'",
     "format": "prettier --write 'src/**/*.{ts,js,json}'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "dist",
