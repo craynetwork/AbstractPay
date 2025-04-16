@@ -4,7 +4,7 @@
   "description": "The chain-abstracted payment SDK for seamless stablecoin transactions across blockchains",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf dist && tsc",
     "lint": "eslint 'src/**/*.ts'",
     "format": "prettier --write 'src/**/*.{ts,js,json}'",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -31,7 +31,8 @@
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
     "prettier": "^3.4.2",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "rimraf": "^3.0.2"
   },
   "dependencies": {
     "axios": "^1.7.9",
