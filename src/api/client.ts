@@ -8,7 +8,8 @@ export const getApiClient = () => {
     baseURL: sdkConfig.getBaseUrl(),
     headers: {
       'Content-Type': 'application/json',
-      'apikey': `${sdkConfig.getApiKey()}`
+      'apikey': `${sdkConfig.getApiKey()}`,
+      'testnet': `${sdkConfig.isTestnet()}`
     }
   })
 };

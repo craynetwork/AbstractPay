@@ -40,6 +40,7 @@ import { AbstractPay } from 'abstractpay';
 const sdk = new AbstractPay({
   apiKey: '<your-api-key>',
   baseUrl: '<api-base-url>',
+  testnet: boolean // optional, default: false
 });
 
 // Set the owner's wallet for signing transactions

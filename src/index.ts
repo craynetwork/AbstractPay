@@ -6,8 +6,8 @@ import { IDomainData } from "./types/common";
 
 export class AbstractPay {
   private owner: any;
-  constructor(config: { apiKey: string; baseUrl: string }) {
-    sdkConfig.setConfig(config.apiKey, config.baseUrl);
+  constructor(config: { apiKey: string; baseUrl: string, testnet: boolean }) {
+    sdkConfig.setConfig(config.apiKey, config.baseUrl, config.testnet);
   }
 
   setOwnerWallet(owner: Account) {
