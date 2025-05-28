@@ -13,3 +13,10 @@ export interface IDomainData {
   types: {}
   values: { deadline: string; value: number }
 }
+
+export type RelayParams = {
+  chainId: number;
+  targetContract: string;
+  callData: string;
+  actionType: string;
+};
