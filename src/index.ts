@@ -86,7 +86,7 @@ export class AbstractPay {
     try {
       const verifyingContract = this.getCrayRelayAddress(params.chainId);
       const message = {
-        user: this.owner.address,
+        user: this.owner.address||this.owner.account.address,
         targetContract: params.targetContract,
         actionType: params.actionType,
         callData: params.callData,
