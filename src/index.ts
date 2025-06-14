@@ -2,7 +2,9 @@ import { Account } from "viem";
 import { apiCall } from "./api/client";
 import { IOrderParams } from "./api/types";
 import { sdkConfig } from "./config";
-import { IDomainData } from "./types/common";
+import { CRAY_RELAY_ADDRESSES } from "./config/contractAddresses";
+import { IDomainData, RelayParams } from "./types/common";
+import { domain, generateNonce, relayTypes } from "./utils/tx";
 
 export class AbstractPay {
   private owner: any;
@@ -76,5 +78,38 @@ export class AbstractPay {
       console.error('Error processing payment:', error);
       throw error;
     }
+  }
+
+  public async relayAction(
+    params: RelayParams,
+  ) {
+    try {
+      const verifyingContract = this.getCrayRelayAddress(params.chainId);
+      const message = {
+        user: this.owner.address||this.owner.account.address,
+        targetContract: params.targetContract,
+        actionType: params.actionType,
+        callData: params.callData,
+        nonce: generateNonce().toString(),
+      }
+      const signature = await this.owner.signTypedData({
+      domain: domain(params.chainId, verifyingContract),
+      types: relayTypes,
+      message,
+      primaryType: 'RelayRequest'
+      });
+      const sigsplit = { r: signature.slice(0, 66), s: '0x' + signature.slice(66, 130), v: '0x' + signature.slice(130, 132) };
+      return apiCall('/relay', 'POST', { params: { ...message, chainId: params.chainId, ...sigsplit } });
+    } catch (error) {
+      console.error('Error relay request:', error);
+      throw error;
+    }
+  }
+
+  // private functions can be added here for internal use
+  private getCrayRelayAddress(chainId: number): string {
+    const address = CRAY_RELAY_ADDRESSES[chainId];
+    if (!address) throw new Error(`Unsupported chainId: ${chainId}`);
+    return address;
   }
 }

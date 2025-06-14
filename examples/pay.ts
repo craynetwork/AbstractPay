@@ -1,29 +1,55 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Temporarily ignore type error, fix later
-import { AbstractPay } from 'abstractpay';
 import { Hex } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
-const BASEURL = process.env.BASE_URL || 'https://dev-api.cray.network/api/'
+import { AbstractPay } from '../src/index';
+const BASEURL = process.env.BASE_URL || 'http://localhost:4000/api/'
 const APIKEY = process.env.API_KEY || '0000-0000-0000-0000-0000'
 const sdk = new AbstractPay({
   apiKey: APIKEY,
-  baseUrl: BASEURL
+  baseUrl: BASEURL,
+  testnet: true,
 });
 const privateKey = process.env.PRIVATE_KEY || "0x<your private key goes here>"
 
 const account = privateKeyToAccount(privateKey as Hex);
-
+const ABI = [
+  {
+    inputs: [
+      { internalType: 'address', name: 'notDotToken_', type: 'address' },
+      { internalType: 'address', name: 'receiver_', type: 'address' },
+      { internalType: 'uint256', name: 'amount_', type: 'uint256' }
+    ],
+    name: 'buy',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  }
+]
 sdk.setOwnerWallet(account)
 const senderAddress = account.address as string
 console.log('senderAddress:', senderAddress)
+const USDC_ADDRESS = '0x036CbD53842c5426634e7929541eC2318f3dCF7e'
+const WRAPPER_ADDRESS = '0x6915cFa5B31063f71c38F1Cb6518935d62Ad2313' // this is the wrapper address for USDC on Base Sepolia
+const targetContractAddress = '0x30104Aa61937bf56c00aA1cfFc63738A799C7123' // this is contract address you want to call.
+const noOfTokens = 100000 // this is the amount of tokens you want to buy.
 // ------------------ pay ------------------
+const chainId = 84532
 const payParams = {
-  receiverAddress: '0xf66f409086647591e0c2f122C1945554b8e0e74F',
-  destinationChain: 421614,
-  destinationToken: '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d',
+  receiverAddress: WRAPPER_ADDRESS,
+  destinationChain: chainId,
+  destinationToken: USDC_ADDRESS,
   amount: '0.1',
   orderType: 'p2p',
   senderAddress,
+  action: {
+    payload: {
+      abi: ABI,
+      functionName: 'buy',
+      args: [targetContractAddress, account.address.toString(), noOfTokens]
+    },
+    gasLimit: 200000
+  }
 }
 
 sdk.pay(payParams).then((res: any) => { console.log(res) }).catch((err: any) => { console.error(err) })
