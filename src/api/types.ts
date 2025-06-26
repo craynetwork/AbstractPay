@@ -44,12 +44,11 @@ export interface IOrderParams {
   action?: IDestinationAction;
 
   /**
-    * Specifies the source token and chain for payment as a chainID:tokenAddress pair.
-    * If provided, the specified tokens and chains will be used.
-    * e.g: [{ 137: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174" }] (USDC from Polygon).
+    * Specifies the source token and chain for payment.
+    * If provided, the specified token and chains will be used.
     * If not provided, spending tokens are automatically determined based on available balances.
    */
-  sourceToken?: [{ number: string }];
+  sourceToken?: [{ address?: string, chainId: number }];
 
   /**
    * An optional note for tracking or additional information.
