@@ -41,7 +41,7 @@ export class AbstractPay {
         message: data.values,
         primaryType: 'Permit'
       });
-      return { r: signature.slice(0, 66), s: '0x' + signature.slice(66, 130), v: '0x' + signature.slice(130, 132), chainId: data.domainData.chainId, verifyingContract: data.domainData.verifyingContract, walletAddress: this.owner.address, value: data.values.value, deadline: data.values.deadline };
+      return { r: signature.slice(0, 66), s: '0x' + signature.slice(66, 130), v: '0x' + signature.slice(130, 132), chainId: data.domainData.chainId, verifyingContract: data.domainData.verifyingContract, walletAddress: this.owner.address || this.owner.account.address, value: data.values.value, deadline: data.values.deadline };
     }));
     return { signedOrder, signedApprovalData };
   }
@@ -86,7 +86,7 @@ export class AbstractPay {
     try {
       const verifyingContract = this.getCrayRelayAddress(params.chainId);
       const message = {
-        user: this.owner.address||this.owner.account.address,
+        user: this.owner.address || this.owner.account.address,
         targetContract: params.targetContract,
         actionType: params.actionType,
         callData: params.callData,
