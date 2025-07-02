@@ -1,4 +1,4 @@
-import { Account } from "viem";
+import { Account, WalletClient } from "viem";
 import { apiCall } from "./api/client";
 import { IOrderParams } from "./api/types";
 import { sdkConfig } from "./config";
@@ -12,7 +12,7 @@ export class AbstractPay {
     sdkConfig.setConfig(config.apiKey, config.baseUrl, config.testnet);
   }
 
-  setOwnerWallet(owner: Account) {
+  setOwnerWallet(owner: Account | WalletClient) {
     this.owner = owner
   }
 
