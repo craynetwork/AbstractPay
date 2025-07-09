@@ -20,3 +20,8 @@ export type RelayParams = {
   callData: string;
   actionType: string;
 };
+
+export interface ISmartWallet{
+  chainId: number;
+  wallet: any
+}

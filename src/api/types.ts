@@ -14,7 +14,7 @@ export interface IOrderParams {
   /**
    * The token address on the destination chain in which the payment will be made.
    */
-  destinationToken: string;
+  destinationToken?: string;
 
   /**
    * The amount to send, specified in plain dollar terms (e.g., "1" for $1).
@@ -48,7 +48,7 @@ export interface IOrderParams {
     * If provided, the specified token and chains will be used.
     * If not provided, spending tokens are automatically determined based on available balances.
    */
-  sourceToken?: [{ address?: string, chainId: number }];
+  sourceTokens?: { address?: string; chainId: number }[];
 
   /**
    * An optional note for tracking or additional information.
