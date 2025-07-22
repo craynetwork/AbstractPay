@@ -1,19 +1,28 @@
-
 export interface IDestinationAction {
   payload: {
     abi: any;
     functionName: string;
     args: any[];
   }; // This will prepare bytecode for the action to execute on the destination chain.
-  gasLimit: number // The maximum gas limit for the action on the destination chain.
+  gasLimit: number; // The maximum gas limit for the action on the destination chain.
 }
 
 export interface IDomainData {
-  domainData: { chainId: number; verifyingContract: string; version: string; name: string; nonce: number }
-  types: {}
-  values: { deadline: string; value: number }
+  domainData: {
+    chainId: number;
+    verifyingContract: string;
+    version: string;
+    name: string;
+    nonce: number;
+  };
+  types: {};
+  values: { deadline: string; value: number };
 }
-
+export interface ITypedOrder {
+  types: Record<any, any>;
+  domain: Record<any, any>;
+  message: Record<any, any>;
+}
 export type RelayParams = {
   chainId: number;
   targetContract: string;
@@ -21,7 +30,7 @@ export type RelayParams = {
   actionType: string;
 };
 
-export interface ISmartWallet{
+export interface ISmartWallet {
   chainId: number;
-  wallet: any
+  wallet: any;
 }
